@@ -152,6 +152,79 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-正则表达式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>正则表达式的简单介绍</p>
+<p>作用：</p>
+<ol>
+<li>匹配验证*【最基础功能】<ol start="2">
+<li>查找与替换</li>
+<li>字符串分割与子串截取<br>应用对象<br>文本<br>表达式组成<br>普通字符：数字(0-9)，字母(a-z，A-Z)等<br>元字符<em>：. [ ] ( ) * + ? ^ $ \ |<br>重难点<br>对正则表达式引擎的工作原理<br>对特殊原字符的掌握和灵活运用<br>举例应用<br>Hello123——匹配hello123<br>单个字符匹配<br>语法    说明    表达式实例    可匹配字符串实例<br>.    可以匹配除换行符“\n”之外的任意一个字符    a.c    abc,acc,a#c,a4c,a</em>c<br>   a#c,a2c,acc,a!c,a=c<br>[…]    表示一个字符集集合（字符类），被匹配的文本的对应位置可以是这个字符集合中指定的任意字符。可以逐个列出，也可以给出范围    1. go[1-9]od    1. go1od,go9od,<ol start="2">
+<li>ak[0-9]*[0-9]*dds    2. akdds,ak99dds,ak0099dds<br>[^…]    如上，取反    a[^0-9]s    a%s,a\s<br>\    转义字符,改变字符的原有含义    a[bcd].e    a[bcd].e</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<p>注：所有的特殊字符在  [  ]  内都会失去其原有的特殊含义<br>    有些特殊字符在[ ]中被赋予新的特殊含义，如  ^ 出现在[ ]中的开始位置表示取反，它出现在[]中的其他位置表示其本身（变成了一个普通字符）<br>    有些特殊字符则变为普通字符，如  .   *    +     ?    $<br>    有的普通字符变为特殊字符，如 - 在[ ]中的位置不是第一个字符则表示一个数字或字母区间，如果在[ ]中的位置是第一个字符则表示其本身（一个普通字符）<br>    在 [ ] 中，如果要使用  - ^  ]  可在在它们前面加上反斜杠，或把  - ^  ]  放在第一个字符的 位置，把  ^放在非第一个字符的位置。</p>
+<p>预定义字符集<br>预定义字符集就是在反斜杠后面跟一个字母，用来表示带有某种含义的字符<br>语法    说明    表达式实例    可匹配字符串实例<br>\d      表示数字集合，可以匹配任意一个十进制数字，相当于[0-9]    a\dc    a0c,a9c,a1c,<br>\D    表示任何非数字字符的集合，可以匹配任意一个非数字字符，相当于[^0-9]    a\Dc    a#c,a!c,acc,a-c<br>\s    表示任何空白字符的集合，可以匹配任意一个空白字符，等同于[&lt;空格&gt;\t\n\r\f\v]    a\sc    a c,<br>\S    表示任何非空白字符的集合，可以匹配任意一个非空白字符，等价于[^\s]    a\Sa    a~a,aaa,a0a,<br>\w    表示单词字符（字母数字下划线）的集合，等价于[a-zA-Z0-9_]    a\wa    aaa,a9a,a_a,<br>\W     表示任何非单词字符（标点符号）集合，等价于[a-zA-Z0-9_]包括空格    a\Wa    a a,a!a,</p>
+<p>字符次数匹配<br>语法    说明    表达式实例    可匹配字符串实例<br>？    表示匹配前面那个字符0次或1次    ab?c    ac,abc</p>
+<ul>
+<li>表示匹配前面那个字符至少一次【贪婪模式】    ab+c    abbbbbc,abc,</li>
+</ul>
+<ul>
+<li>表示匹配前面那个字符0次或多次【贪婪模式】    ab*c    ac,abc,abbc,abbbc<br>{m}    表示匹配前面那个字符m次    ab{3}c    只能匹配abbbc<br>{m,n}    表示匹配前面那个字符至少m次，最多n次    abb{2,3}c    只能匹配abbbc,abbbbc</li>
+</ul>
+<p>注：<br>    1. {0,1}或{，1}等价于？<br>    2. {1，}等价于+<br>    3. {0，}等价于*<br>    所以，我们优先选择使用？ +  *    因为他们书写简单，是表达式变得简洁。<br>     ? 这个字符在正则表达中与 ?  +   *   {m,n}连用时还有一个额外的功能，就是将匹配模式由贪婪模式（尽可能的增加匹配次数） 变成 非贪婪模式（尽可能减少匹配次数）， 这个会在下面的内容中进行详细说明。</p>
+<p>边界匹配<br>就是对一个字符串的开头或结尾，一个单词的开头或结尾进行匹配<br>语法    说明    表达式实例    可匹配字符串实例<br>^    匹配字符串的开头，在多行模式中匹配每一行的行首，表示匹配以指定字符开头的字符串    ^abc    abc,abcfds,<br>$    匹配字符串的末尾，在多行模式中匹配每一行的末尾，表示匹配以指定字符结尾的字符串    abc$    abc,fdsabc,<br>\A    仅匹配字符串的开头    \Aasdf    asdf,asdffr,<br>\Z    仅匹配字符串的末尾    aaa\Z    fefaaa,aaa<br>\b    匹配\w和\W之间【字母 数字 下划线 标点】，单词的词首和词尾    a\b!bc    a!bc<br>\B    等价于[^\b]    a\Bbc    abc</p>
+<p>逻辑与分组<br>语法    说明    表达式实例    可匹配字符串实例<br>|    表示逻辑或，代表他左右两边的表达式将会任意匹配一个，先匹配左边的表达式，一旦匹配成功就会跳过对右边表达式的匹配，如果|没有出现在（）中，则它的有效范围是整个表达式    abc|def    只能匹配到abc和def<br>（……）    被括起来的表达式表示一个分组，且每个分组都有一个正整数编号，从表达式左边开始每遇到一个分组的（，分组编号就加+1，    a(123|abc){2}e    只能匹配a123123e和aabcabce<br>    分组表达式作为一个整体，后面可接表示配词次数的字符，分组表达式中的 | 仅在该分组中有效<br>(?P<name>)    也表示一个分组，只是出了原有的分组编号外，又指定了分组名称    a(?P<id>123|456){2}e    只能匹配a123123e和aabcabce<br><number>    引用编号为<number>的分组所匹配到的字符串    (\d)abc\1    1abc1,2abc2<br>(?P=name)    引用名称为name的分组所匹配的字符串    (?P<id>\d)abc(?P=id)    1abc1,2abc2</id></number></number></id></name></p>
+<p>特殊构造<br>语法    说明    表达式实例    可匹配字符串实例<br>(?:…..)    (….)的不分组版本，用于使用“|”表示逻辑关系或后接数量词指定整体出现的次数    (?:abd)2    abcabc<br>(?#…)    #后的内容为注释，将会被忽略    abc(?#comment)123    abc123<br>(?=…)    表示后面的字符串内容匹配这个表达式时整个正则表达式才匹配成功    a(?=\d)    字母a加上一个数字组成的字符串。不消耗字符串内容<br>(?!=…)    表示后面的字符串内容不匹配这个表达式时整个正则表达式才匹配成功    a(?!=\d)    字母a加上一个非数字组成的字符串。不消耗字符串内容<br>(?&lt;=…)    表示前面的字符串内容匹配这个表达式时整个正则表达式才匹配成功    (?&lt;=\d)a    一个数字字符加上一个字母a组成的字符串。不消耗字符串内容<br>(?&lt;!…)    表示前面的字符串内容不匹配这个表达式时整个正则表达式才匹配成功    (?&lt;!\d)a    一个非数字字符加上一个字母a组成的字符串。不消耗字符串内容<br>(?(id/name)yes-pattern|no-pattern)    表示如果编号为id或别名为name的分组匹配到了字符，则需要匹配yes-pattern这个表达式，否则需要匹配no-pattern这个表达式，|no-pattern可以省略    (\d)abc(?(1)\d|abc)    1abc2,abcabc</p>
+<p>参考：<a href="https://www.cnblogs.com/Jansens520/p/6915384.html" target="_blank" rel="noopener">https://www.cnblogs.com/Jansens520/p/6915384.html</a><br>在线正则表达式测试：<a href="http://tool.oschina.net/regex/?optionGlobl=global#" target="_blank" rel="noopener">http://tool.oschina.net/regex/?optionGlobl=global#</a><br>李 培东 于 2019/8/30 11:13 修改</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/08/30/正则表达式/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-MY-FIRST-ARTICAL-IN-BLOG" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
